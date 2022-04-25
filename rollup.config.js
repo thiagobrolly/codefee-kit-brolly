@@ -5,6 +5,7 @@ import peerDeps from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
 import { terser } from 'rollup-plugin-terser';
 import renameNodeModules from "rollup-plugin-rename-node-modules";
+import rename from 'rollup-plugin-rename';
 
 export default [
   {
@@ -16,21 +17,21 @@ export default [
       // ESM
       {
         format: 'esm',
-        sourcemap: true,
+        //sourcemap: true,
         dir: 'lib',
         preserveModules: true,
         preserveModulesRoot: 'src',
         entryFileNames: '[name].esm.js',
       },
       // CommonJS96+
-      {
-        format: 'cjs',
-        sourcemap: true,
-        exports: 'named',
-        dir: 'lib',
-        preserveModules: true,
-        preserveModulesRoot: 'src',
-      },
+      // {
+      //   format: 'cjs',
+      //   //sourcemap: true,
+      //   exports: 'named',
+      //   dir: 'lib',
+      //   preserveModules: true,
+      //   preserveModulesRoot: 'src',
+      // },
     ],
     plugins: [
       peerDeps(),
@@ -41,7 +42,14 @@ export default [
       }),
       postcss(),
       terser(),
-      //renameNodeModules("external")
+      renameNodeModules("external", true)
+      // rename({
+      //   include: ['**/*.js'],
+      //   map: (name) => name
+      //       .replace('src/', '')
+      //       .replace('node_modules/', 'external/')
+      //       .replace('../../external', '../external'),
+      // })
     ],
   }
 ];
